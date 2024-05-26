@@ -1,12 +1,11 @@
 // receives time, set time and set is running
 // handles logic to convert the time/set it and run the timer
 
-export const convertAndStartTimer = (
+export const timeConvert = (
   time: { hours: string; minutes: string; seconds: string },
   setTime: React.Dispatch<
     React.SetStateAction<{ hours: string; minutes: string; seconds: string }>
-  >,
-  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>
+  >
 ) => {
   //parses into an integer of base 10 and converts to hours/mins/seconds
   const totalSeconds =
@@ -29,6 +28,4 @@ export const convertAndStartTimer = (
     minutes: formattedMinutes,
     seconds: formattedSeconds,
   });
-
-  setIsRunning((prev) => !prev);
 };
