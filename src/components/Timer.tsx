@@ -7,18 +7,18 @@ const Timer = () => {
     minutes: "00",
     seconds: "00",
   });
-  console.log(time);
-
   //keeps track if the time is running
   const [isRunning, setIsRunning] = useState(false);
 
   //handles the input
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputTime = e.target.value.replace(/[^0-9]/g, "");
-
+    // saves input time only if its a number, if it exceeds 6 characters the first element will be deleted
+    let inputTime = e.target.value.replace(/[^0-9]/g, "");
+    if (inputTime.length > 6) {
+      inputTime = e.target.value.slice(-6);
+    }
     //pads the value with leading 0 to ensure its always 6 chars long
     const paddedInput = inputTime.padStart(6, "0");
-    console.log("handleInputChange ~ paddedInput:", paddedInput);
 
     // saves the seconds in a state
 
@@ -39,12 +39,13 @@ const Timer = () => {
   useEffect(() => {
     if (isRunning) {
       const countdown = setInterval(() => {
+        // parse to int
         let hoursInt = parseInt(time.hours);
         let minutesInt = parseInt(time.minutes);
         let secondsInt = parseInt(time.seconds);
 
+        // if it reaches 0, it should clear the state
         if (hoursInt === 0 && minutesInt === 0 && secondsInt === 0) {
-          clearInterval(countdown);
           setTime({ hours: "00", minutes: "00", seconds: "00" });
           setIsRunning(false);
         } else {
@@ -84,14 +85,15 @@ const Timer = () => {
   return (
     <div className="flex flex-col items-center">
       <div className="relative">
-        <p className="text-5xl absolute right-[15%] pointer-events-none select-none top-[6px]">
+        <p className="text-5xl absolute right-[15%] pointer-events-none select-none">
           {time.hours}:{time.minutes}:{time.seconds}
         </p>
         <input
-          type="text"
-          className="text-5xl text-transparent bg-transparent w-[250px] border-red-700 border"
+          type="number"
+          className="text-transparent bg-transparent w-[250px] border-red-700 border h-14 text-[1px]"
           onChange={handleInputChange}
-          maxLength={6}
+          // maxLength={6}
+          value={`${time.hours}${time.minutes}${time.seconds}`}
         />
       </div>
       <button onClick={handleStartStop}>{isRunning ? "Stop" : "Start"}</button>
