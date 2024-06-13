@@ -7,8 +7,14 @@ const Timer = () => {
     minutes: "00",
     seconds: "00",
   });
+  console.log(time);
   //keeps track if the time is running
   const [isRunning, setIsRunning] = useState(false);
+
+  //alarm sound in a state so it stays during rerenders
+  const [alarmAudio] = useState(new Audio("bedside-clock-alarm-95792.mp3"));
+
+  //keeps track if the sound is playing
 
   //handles the input
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +43,8 @@ const Timer = () => {
 
   //handles countdown
   useEffect(() => {
+    // sound variable
+
     if (isRunning) {
       const countdown = setInterval(() => {
         // parse to int
@@ -47,7 +55,9 @@ const Timer = () => {
         // if it reaches 0, it should clear the state
         if (hoursInt === 0 && minutesInt === 0 && secondsInt === 0) {
           setTime({ hours: "00", minutes: "00", seconds: "00" });
-          setIsRunning(false);
+
+          //plays audio
+          alarmAudio.play();
         } else {
           if (secondsInt > 0) {
             secondsInt -= 1;
@@ -73,30 +83,37 @@ const Timer = () => {
 
       return () => clearInterval(countdown);
     }
-  }, [isRunning, time]);
+  }, [isRunning, time, alarmAudio]);
 
   //start/stop button and converts to time format
   const handleStartStop = () => {
+    //pauses sound and resets it
+    alarmAudio.pause();
+    alarmAudio.currentTime = 0;
     timeConvert(time, setTime);
 
     setIsRunning((prev) => !prev);
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative">
-        <p className="text-5xl absolute right-[15%] pointer-events-none select-none">
+    <div className="flex flex-col items-center justify-center bg-[#2C1F30] text-white w-[90%] h-[300px] rounded-lg border-[#4e3755] border max-w-[700px]">
+      <div className="relative my-10">
+        <p className="text-5xl absolute right-[5%] pointer-events-none select-none font-semibold">
           {time.hours}:{time.minutes}:{time.seconds}
         </p>
         <input
-          type="number"
-          className="text-transparent bg-transparent w-[250px] border-red-700 border h-14 text-[1px]"
+          type="text"
+          className="text-transparent bg-transparent w-[200px] h-14 text-[1px] outline-none border-b border-[#7a5685]"
           onChange={handleInputChange}
-          // maxLength={6}
           value={`${time.hours}${time.minutes}${time.seconds}`}
         />
       </div>
-      <button onClick={handleStartStop}>{isRunning ? "Stop" : "Start"}</button>
+      <button
+        onClick={handleStartStop}
+        className=" bg-[#4e3755] text-xl px-4 rounded-full pb-[5px] hover:bg-[#7a5685] font-semibold"
+      >
+        {isRunning ? "Stop" : "Start"}
+      </button>
     </div>
   );
 };
