@@ -90,6 +90,7 @@ const Timer = () => {
     //pauses sound and resets it
     alarmAudio.pause();
     alarmAudio.currentTime = 0;
+
     timeConvert(time, setTime);
 
     setIsRunning((prev) => !prev);
@@ -97,16 +98,29 @@ const Timer = () => {
 
   return (
     <div className="flex flex-col items-center justify-center bg-[#2C1F30] text-white w-[90%] h-[300px] rounded-lg border-[#4e3755] border max-w-[700px]">
-      <div className="relative my-10">
-        <p className="text-5xl absolute right-[5%] pointer-events-none select-none font-semibold">
+      <div className="relative my-10 group">
+        <p
+          className={`text-5xl absolute right-[5%] pointer-events-none select-none font-semibold  ${
+            !isRunning && "group-focus-within:text-white/60"
+          }`}
+        >
           {time.hours}:{time.minutes}:{time.seconds}
         </p>
-        <input
-          type="text"
-          className="text-transparent bg-transparent w-[200px] h-14 text-[1px] outline-none border-b border-[#7a5685]"
-          onChange={handleInputChange}
-          value={`${time.hours}${time.minutes}${time.seconds}`}
-        />
+        <div className="flex">
+          <input
+            type="text"
+            className="text-transparent bg-transparent w-[200px] h-14 text-[0px] outline-none border-b border-[#7a5685]"
+            onChange={isRunning ? undefined : handleInputChange}
+            value={`${time.hours}${time.minutes}${time.seconds}`}
+          />
+          {!isRunning && (
+            <div
+              className={`bg-white w-[1.5px] my-1 animate-expandAnimation origin-center h-[80%] absolute right-0 hidden ${
+                !isRunning && "group-focus-within:block"
+              }`}
+            />
+          )}
+        </div>
       </div>
       <button
         onClick={handleStartStop}
