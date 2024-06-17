@@ -7,14 +7,14 @@ const Timer = () => {
     minutes: "00",
     seconds: "00",
   });
-  console.log(time);
   //keeps track if the time is running
   const [isRunning, setIsRunning] = useState(false);
 
   //alarm sound in a state so it stays during rerenders
   const [alarmAudio] = useState(new Audio("bedside-clock-alarm-95792.mp3"));
 
-  //keeps track if the sound is playing
+  //keeps track if the alarm is active
+  const [isAlarmActive, setIsAlarmActive] = useState(false);
 
   //handles the input
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +57,8 @@ const Timer = () => {
           setTime({ hours: "00", minutes: "00", seconds: "00" });
 
           //plays audio
-          alarmAudio.play();
+          // alarmAudio.play();
+          setIsAlarmActive(true);
         } else {
           if (secondsInt > 0) {
             secondsInt -= 1;
@@ -94,10 +95,20 @@ const Timer = () => {
     timeConvert(time, setTime);
 
     setIsRunning((prev) => !prev);
+
+    setIsAlarmActive(false);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#2C1F30] text-white w-[90%] h-[300px] rounded-lg border-[#4e3755] border max-w-[700px]">
+    <div
+      className={`flex flex-col items-center justify-center  text-white w-[90%] h-[300px] rounded-lg  border max-w-[700px]
+    ${
+      isAlarmActive
+        ? "border-red-400 bg-red-500/60"
+        : " border-[#4e3755] bg-[#2C1F30]"
+    }
+    `}
+    >
       <div className="relative my-10 group">
         <p
           className={`text-5xl absolute right-[5%] pointer-events-none select-none font-semibold  ${
@@ -109,7 +120,9 @@ const Timer = () => {
         <div className="flex">
           <input
             type="text"
-            className="text-transparent bg-transparent w-[200px] h-14 text-[0px] outline-none border-b border-[#7a5685]"
+            className={`text-transparent bg-transparent w-[200px] h-14 text-[0px] outline-none border-b  ${
+              isAlarmActive ? "border-red-300" : "border-[#7a5685]"
+            }`}
             onChange={isRunning ? undefined : handleInputChange}
             value={`${time.hours}${time.minutes}${time.seconds}`}
           />
@@ -124,7 +137,11 @@ const Timer = () => {
       </div>
       <button
         onClick={handleStartStop}
-        className=" bg-[#4e3755] text-xl px-4 rounded-full pb-[5px] hover:bg-[#7a5685] font-semibold"
+        className={`  text-xl px-4 rounded-full pb-[5px]  font-semibold ${
+          isAlarmActive
+            ? "bg-red-700 hover:bg-red-600"
+            : " bg-[#4e3755] hover:bg-[#7a5685]"
+        }`}
       >
         {isRunning ? "Stop" : "Start"}
       </button>
