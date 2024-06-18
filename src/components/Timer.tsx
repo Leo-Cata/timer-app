@@ -1,12 +1,23 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { timeConvert } from "./TimeFormatter";
 
-const Timer = () => {
-  const [time, setTime] = useState({
-    hours: "00",
-    minutes: "00",
-    seconds: "00",
-  });
+export interface Time {
+  hours: string;
+  minutes: string;
+  seconds: string;
+}
+
+export interface TimeState {
+  time: Time;
+  setTime: (value: Time) => void;
+}
+
+const Timer = ({ time, setTime }: TimeState) => {
+  // const [time, setTime] = useState({
+  //   hours: "00",
+  //   minutes: "00",
+  //   seconds: "00",
+  // });
   //keeps track if the time is running
   const [isRunning, setIsRunning] = useState(false);
 
@@ -57,7 +68,7 @@ const Timer = () => {
           setTime({ hours: "00", minutes: "00", seconds: "00" });
 
           //plays audio
-          // alarmAudio.play();
+          alarmAudio.play();
           setIsAlarmActive(true);
         } else {
           if (secondsInt > 0) {
@@ -84,7 +95,7 @@ const Timer = () => {
 
       return () => clearInterval(countdown);
     }
-  }, [isRunning, time, alarmAudio]);
+  }, [isRunning, time, alarmAudio, setTime]);
 
   //start/stop button and converts to time format
   const handleStartStop = () => {
@@ -92,7 +103,7 @@ const Timer = () => {
     alarmAudio.pause();
     alarmAudio.currentTime = 0;
 
-    timeConvert(time, setTime);
+    timeConvert({ time, setTime });
 
     setIsRunning((prev) => !prev);
 

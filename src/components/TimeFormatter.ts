@@ -1,12 +1,9 @@
 // receives time, set time and set is running
 // handles logic to convert the time/set it and run the timer
 
-export const timeConvert = (
-  time: { hours: string; minutes: string; seconds: string },
-  setTime: React.Dispatch<
-    React.SetStateAction<{ hours: string; minutes: string; seconds: string }>
-  >
-) => {
+import { TimeState } from "./Timer";
+
+export const timeConvert = ({ time, setTime }: TimeState) => {
   //parses into an integer of base 10 and converts to hours/mins/seconds
   const totalSeconds =
     parseInt(time.hours, 10) * 3600 +
