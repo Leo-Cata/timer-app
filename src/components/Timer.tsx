@@ -76,6 +76,10 @@ const Timer = ({ time, setTime }: TimeState) => {
     setIsAlarmActive(false);
   };
 
+  const handleClickRunning = () => {
+    setIsRunning(false);
+  };
+
   return (
     <div
       className={`flex flex-col items-center justify-center  text-white w-[90%] h-[300px] rounded-lg  border max-w-[700px]
@@ -86,31 +90,20 @@ const Timer = ({ time, setTime }: TimeState) => {
     }
     `}
     >
-      <div className="relative my-10 group">
-        <p
-          className={`text-5xl absolute right-[5%] pointer-events-none select-none font-semibold  ${
-            !isRunning && "group-focus-within:text-white/60"
-          }`}
-        >
-          {time.hours}:{time.minutes}:{time.seconds}
-        </p>
-        <div className="flex">
-          <input
-            type="text"
-            className={`text-transparent bg-transparent w-[200px] h-14 text-[0px] outline-none border-b  ${
-              isAlarmActive ? "border-red-300" : "border-[#7a5685]"
-            }`}
-            onChange={isRunning ? undefined : handleInputChange}
-            value={`${time.hours}${time.minutes}${time.seconds}`}
-          />
-          {!isRunning && (
-            <div
-              className={`bg-white w-[1.5px] my-1 animate-expandAnimation origin-center h-[80%] absolute right-0 hidden ${
-                !isRunning && "group-focus-within:block"
-              }`}
-            />
-          )}
-        </div>
+      <div className="flex my-10">
+        <input
+          type="text"
+          // when is running, show pointer to show that is clickable, else show grayed out text
+          // when alarm is playing change to red, else normal
+          className={`bg-transparent w-[200px] h-14 text-5xl outline-none border-b-2 text-center  
+            ${isRunning ? "cursor-pointer" : "focus-within:text-white/60"}
+            ${isAlarmActive ? "border-red-300" : "border-[#7a5685]"}`}
+          // changes the value when the clock is not running
+          onChange={isRunning ? undefined : handleInputChange}
+          // when is running, allows to stop the timer by clicking on the input
+          onClick={isRunning ? handleClickRunning : undefined}
+          value={`${time.hours}:${time.minutes}:${time.seconds}`}
+        />
       </div>
       <button
         onClick={handleStartStop}
