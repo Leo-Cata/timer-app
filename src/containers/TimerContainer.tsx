@@ -9,10 +9,6 @@ const TimerContainer = () => {
     seconds: "00",
   });
 
-  // const handleSetTime = (hours: string, minutes: string, seconds: string) => {
-  //   setTime({ hours, minutes, seconds });
-  // };
-
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">
       <Timer time={time} setTime={setTime} />

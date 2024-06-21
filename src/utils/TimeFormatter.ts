@@ -1,7 +1,7 @@
 // receives time, set time and set is running
 // handles logic to convert the time/set it and run the timer
 
-import { TimeState } from "./Timer";
+import { TimeState } from "../Types/Types";
 
 export const timeConvert = ({ time, setTime }: TimeState) => {
   //parses into an integer of base 10 and converts to hours/mins/seconds
