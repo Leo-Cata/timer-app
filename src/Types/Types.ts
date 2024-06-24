@@ -8,3 +8,7 @@ export interface TimeState {
   time: Time;
   setTime: (value: Time) => void;
 }
+
+export interface SavedTimes extends Time {
+  name: string;
+}

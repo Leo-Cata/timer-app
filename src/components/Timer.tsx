@@ -56,6 +56,9 @@ const Timer = ({ time, setTime }: TimeState) => {
             minutes: minutesInt.toString().padStart(2, "0"),
             seconds: secondsInt.toString().padStart(2, "0"),
           });
+
+          // dynamically changes the title
+          document.title = `${time.hours}:${time.minutes}:${time.seconds}`;
         }
       }, 1000);
 
@@ -74,6 +77,8 @@ const Timer = ({ time, setTime }: TimeState) => {
     setIsRunning((prev) => !prev);
 
     setIsAlarmActive(false);
+
+    document.title = "Timer";
   };
 
   const handleClickRunning = () => {
