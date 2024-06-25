@@ -11,6 +11,8 @@ const SaveTimes = () => {
     seconds: "00",
   });
 
+  const [dateNow, setDateNow] = useState<string>("");
+
   //components time state name to save
   const [timeName, setTimeName] = useState("");
 
@@ -36,12 +38,16 @@ const SaveTimes = () => {
       // save item in lc
       localStorage.setItem(timeName.toString(), JSON.stringify(compTime));
 
+      // setDateNow(new Date.now)
       // get lc item with key order
       // if it exists, parse it from json, else create an empty array
       // convert to string and push current item
       //save item back again
       const savedOrder = localStorage.getItem("order");
       const order = savedOrder ? JSON.parse(savedOrder) : [];
+
+      // when an update is done, set the current date to dynamically reload RetrieveTimes
+      setDateNow(new Date().toString());
 
       // if timeName was saved in order before, don't add a duplicated
       if (!order.includes(timeName)) {
@@ -80,7 +86,7 @@ const SaveTimes = () => {
           💾
         </button>
       </div>
-      <RetrieveTimes />
+      <RetrieveTimes dateNow={dateNow} setDateNow={setDateNow} />
     </div>
   );
 };

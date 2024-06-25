@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { SavedTimes } from "../Types/Types";
+import { SavedTimes, StateSetterDateNow } from "../Types/Types";
+import SavedItem from "./SavedItem";
 
-const RetrieveTimes = () => {
+const RetrieveTimes = ({ dateNow, setDateNow }: StateSetterDateNow) => {
   // save the local storage keys
   const [storedTimes, setStoredTimes] = useState<SavedTimes[]>([]);
 
@@ -35,33 +36,11 @@ const RetrieveTimes = () => {
 
     //and save it to the state
     setStoredTimes(LCTimesToSet);
-  }, []);
-
-  const handleDeleteTime = (timeName: string) => {
-    localStorage.removeItem(timeName);
-
-    const asd = JSON.parse(localStorage.getItem("order"));
-
-    const index = asd?.indexOf(timeName);
-    console.log(index);
-    if (index != -1) {
-      asd?.splice(index, 1);
-      console.log(asd);
-      localStorage.removeItem("order");
-      localStorage.setItem("order", JSON.stringify(asd));
-    }
-  };
+  }, [dateNow, setDateNow]);
 
   return (
     <div>
-      {storedTimes.map((time) => (
-        <div key={time.name}>
-          <p className="text-white">
-            {time.name}/{time.hours}:{time.minutes}:{time.seconds}
-          </p>
-          <button onClick={() => handleDeleteTime(time.name)}>🗑️</button>
-        </div>
-      ))}
+      <SavedItem storedTimes={storedTimes} setDateNow={setDateNow} />
     </div>
   );
 };
