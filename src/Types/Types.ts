@@ -3,10 +3,12 @@ export interface Time {
   minutes: string;
   seconds: string;
 }
-
-export interface TimeState {
-  time: Time;
+export interface SetTime {
   setTime: (value: Time) => void;
+}
+
+export interface TimeState extends SetTime {
+  time: Time;
 }
 
 export interface SavedTimes extends Time {
@@ -19,8 +21,10 @@ interface SetDateNow {
 
 export interface SavedItemProps extends SetDateNow {
   storedTimes: SavedTimes[];
+  setTime: (value: Time) => void;
 }
 
 export interface StateSetterDateNow extends SetDateNow {
   dateNow: string;
+  setTime: (value: Time) => void;
 }

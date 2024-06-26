@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { SavedTimes, StateSetterDateNow } from "../Types/Types";
 import SavedItem from "./SavedItem";
 
-const RetrieveTimes = ({ dateNow, setDateNow }: StateSetterDateNow) => {
+const RetrieveTimes = ({
+  dateNow,
+  setDateNow,
+  setTime,
+}: StateSetterDateNow) => {
   // save the local storage keys
   const [storedTimes, setStoredTimes] = useState<SavedTimes[]>([]);
 
@@ -40,7 +44,11 @@ const RetrieveTimes = ({ dateNow, setDateNow }: StateSetterDateNow) => {
 
   return (
     <div>
-      <SavedItem storedTimes={storedTimes} setDateNow={setDateNow} />
+      <SavedItem
+        storedTimes={storedTimes}
+        setDateNow={setDateNow}
+        setTime={setTime}
+      />
     </div>
   );
 };

@@ -10,9 +10,9 @@ const TimerContainer = () => {
   });
 
   return (
-    <div className="w-full h-full flex justify-center items-center flex-col">
+    <div className="flex flex-col items-center lg:mt-52 space-y-10 w-full">
       <Timer time={time} setTime={setTime} />
-      <SaveTimes />
+      <SaveTimes setTime={setTime} />
     </div>
   );
 };

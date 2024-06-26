@@ -1,9 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { handleFormatValidation } from "../utils/InputFormatValidation";
-import { Time } from "../Types/Types";
+import { SetTime, Time } from "../Types/Types";
 import RetrieveTimes from "./RetrieveTimes";
 
-const SaveTimes = () => {
+import { LuBookmark } from "react-icons/lu";
+
+const SaveTimes = ({ setTime }: SetTime) => {
   // component's time state
   const [compTime, setCompTime] = useState<Time>({
     hours: "00",
@@ -38,7 +40,6 @@ const SaveTimes = () => {
       // save item in lc
       localStorage.setItem(timeName.toString(), JSON.stringify(compTime));
 
-      // setDateNow(new Date.now)
       // get lc item with key order
       // if it exists, parse it from json, else create an empty array
       // convert to string and push current item
@@ -64,29 +65,39 @@ const SaveTimes = () => {
   };
 
   return (
-    <div>
-      <div className="flex w-full text-lg justify-center space-x-4 py-10">
+    <div className="max-w-[590px] w-full">
+      <div className="space-x-4 text-base lg:text-xl flex justify-between ">
         <input
           type="text"
           name="Time Name"
           id="Time Name"
           onChange={handleSetName}
-          className="mr-1 max-w-[150px]  bg-transparent text-white border-b border-[#7a5685] "
+          maxLength={20}
+          className="bg-transparent text-white border-b-2 border-[#7a5685] pb-1 pl-1"
+          placeholder="Name"
         />
-
-        <input
-          type="text"
-          name="Time Value"
-          id="Time Value"
-          value={`${compTime?.hours}:${compTime?.minutes}:${compTime?.seconds}`}
-          onChange={handleSaveTime}
-          className="w-[80px] text-center bg-transparent text-white border-b border-[#7a5685] focus:text-white/60"
-        />
-        <button className="text-white" onClick={handleSaveLocal}>
-          💾
-        </button>
+        <div className="self-baseline flex">
+          <input
+            type="tel"
+            name="Time Value"
+            id="Time Value"
+            value={`${compTime?.hours}:${compTime?.minutes}:${compTime?.seconds}`}
+            onChange={handleSaveTime}
+            className="text-center bg-transparent text-white border-b-2 border-[#7a5685] focus:text-white/60 max-w-[70px] lg:max-w-[100px] pb-1 mr-6"
+          />
+          <button
+            className="text-white text-2xl mr-2"
+            onClick={handleSaveLocal}
+          >
+            <LuBookmark />
+          </button>
+        </div>
       </div>
-      <RetrieveTimes dateNow={dateNow} setDateNow={setDateNow} />
+      <RetrieveTimes
+        dateNow={dateNow}
+        setDateNow={setDateNow}
+        setTime={setTime}
+      />
     </div>
   );
 };

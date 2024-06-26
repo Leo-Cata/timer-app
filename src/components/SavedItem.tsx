@@ -1,6 +1,8 @@
 import { SavedItemProps } from "../Types/Types";
 
-const SavedItem = ({ storedTimes, setDateNow }: SavedItemProps) => {
+import { LuTrash } from "react-icons/lu";
+
+const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
   //gets order from lc
   const storedInfo = localStorage.getItem("order");
 
@@ -30,11 +32,33 @@ const SavedItem = ({ storedTimes, setDateNow }: SavedItemProps) => {
   };
 
   return (
-    <div className="text-white">
+    <div className="text-white space-y-2 pt-10 lg:text-xl">
       {storedTimes.map((time) => (
-        <div key={time.name}>
-          <p>{time.name}</p>
-          <button onClick={() => handleDeleteTime(time.name)}>trash</button>
+        <div
+          key={time.name}
+          className="flex px-2 justify-between py-2 bg-[#2C1F30] rounded-md border-b-[3px] border-[#4e3755] "
+        >
+          <div
+            className="hover:cursor-pointer flex w-full"
+            onClick={() =>
+              setTime({
+                hours: time.hours,
+                minutes: time.minutes,
+                seconds: time.seconds,
+              })
+            }
+          >
+            <p className="w-full">{time.name}</p>
+            <p className="mx-5 lg:mx-10">
+              {time.hours}:{time.minutes}:{time.seconds}
+            </p>
+          </div>
+          <button
+            onClick={() => handleDeleteTime(time.name)}
+            className="text-red-800"
+          >
+            <LuTrash size={24} />
+          </button>
         </div>
       ))}
     </div>

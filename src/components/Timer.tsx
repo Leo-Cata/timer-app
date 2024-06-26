@@ -87,7 +87,7 @@ const Timer = ({ time, setTime }: TimeState) => {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center  text-white w-[90%] h-[300px] rounded-lg  border max-w-[700px]
+      className={` text-white rounded-lg  border max-w-[600px] w-full 
     ${
       isAlarmActive
         ? "border-red-400 bg-red-500/60"
@@ -95,12 +95,12 @@ const Timer = ({ time, setTime }: TimeState) => {
     }
     `}
     >
-      <div className="flex my-10">
+      <div className="flex flex-col items-center space-y-5 py-10">
         <input
-          type="text"
+          type="tel"
           // when is running, show pointer to show that is clickable, else show grayed out text
           // when alarm is playing change to red, else normal
-          className={`bg-transparent w-[200px] h-14 text-5xl outline-none border-b-2 text-center  
+          className={`bg-transparent w-[200px]  text-5xl outline-none border-b-2 text-center 
             ${isRunning ? "cursor-pointer" : "focus-within:text-white/60"}
             ${isAlarmActive ? "border-red-300" : "border-[#7a5685]"}`}
           // changes the value when the clock is not running
@@ -109,17 +109,17 @@ const Timer = ({ time, setTime }: TimeState) => {
           onClick={isRunning ? handleClickRunning : undefined}
           value={`${time.hours}:${time.minutes}:${time.seconds}`}
         />
+        <button
+          onClick={handleStartStop}
+          className={`px-4 pb-1.5 align-text-top  text-xl rounded-full  font-semibold ${
+            isAlarmActive
+              ? "bg-red-700 hover:bg-red-600"
+              : " bg-[#4e3755] hover:bg-[#7a5685]"
+          }`}
+        >
+          {isRunning ? "Stop" : "Start"}
+        </button>
       </div>
-      <button
-        onClick={handleStartStop}
-        className={`  text-xl px-4 rounded-full pb-[5px]  font-semibold ${
-          isAlarmActive
-            ? "bg-red-700 hover:bg-red-600"
-            : " bg-[#4e3755] hover:bg-[#7a5685]"
-        }`}
-      >
-        {isRunning ? "Stop" : "Start"}
-      </button>
     </div>
   );
 };
