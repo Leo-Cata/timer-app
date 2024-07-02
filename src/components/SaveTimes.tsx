@@ -66,6 +66,7 @@ const SaveTimes = ({ setTime }: SetTime) => {
 
   return (
     <div className="max-w-[590px] w-full">
+      <p className="text-white text-lg mb-1">Guardar Tiempo</p>
       <div className="space-x-4 text-base lg:text-xl flex justify-between ">
         <input
           type="text"
@@ -74,7 +75,7 @@ const SaveTimes = ({ setTime }: SetTime) => {
           onChange={handleSetName}
           maxLength={20}
           className="bg-transparent text-white border-b-2 border-[#7a5685] pb-1 pl-1"
-          placeholder="Name"
+          placeholder="Nombre"
         />
         <div className="self-baseline flex">
           <input
@@ -93,6 +94,7 @@ const SaveTimes = ({ setTime }: SetTime) => {
           </button>
         </div>
       </div>
+      <div className="w-full h-[3px] my-5  bg-[#7a5685]/40 lg:my-5 rounded-full" />
       <RetrieveTimes
         dateNow={dateNow}
         setDateNow={setDateNow}

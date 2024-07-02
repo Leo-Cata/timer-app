@@ -1,12 +1,22 @@
+import { useState } from "react";
 import { SavedItemProps } from "../Types/Types";
 
 import { LuTrash } from "react-icons/lu";
+import { VscLoading } from "react-icons/vsc";
 
 const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
   //gets order from lc
   const storedInfo = localStorage.getItem("order");
 
+  const [coolDown, setCoolDown] = useState(false);
+
   const handleDeleteTime = (keyName: string) => {
+    // interval to give time for the re-render
+    setCoolDown(true);
+    setInterval(() => {
+      setCoolDown(false);
+    }, 1500);
+
     // removes key from lc
     localStorage.removeItem(keyName);
 
@@ -32,14 +42,14 @@ const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
   };
 
   return (
-    <div className="text-white space-y-2 pt-10 lg:text-xl">
+    <div className="text-white space-y-2  lg:text-xl ">
       {storedTimes.map((time) => (
         <div
           key={time.name}
-          className="flex px-2 justify-between py-2 bg-[#2C1F30] rounded-md border-b-[3px] border-[#4e3755] "
+          className="flex px-2 justify-between py-2 bg-[#2C1F30] rounded-md border-b-[3px] border-[#4e3755] hover:bg-[#4e3755]"
         >
           <div
-            className="hover:cursor-pointer flex w-full"
+            className="hover:cursor-pointer flex w-full "
             onClick={() =>
               setTime({
                 hours: time.hours,
@@ -54,10 +64,18 @@ const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
             </p>
           </div>
           <button
-            onClick={() => handleDeleteTime(time.name)}
-            className="text-red-800"
+            disabled={coolDown}
+            onClick={() => (coolDown ? null : handleDeleteTime(time.name))}
+            className={`text-red-800 ${
+              coolDown ? "text-blue-400" : "hover:text-red-400"
+            }
+            `}
           >
-            <LuTrash size={24} />
+            {coolDown ? (
+              <VscLoading size={24} className="animate-spin" />
+            ) : (
+              <LuTrash size={24} />
+            )}
           </button>
         </div>
       ))}
