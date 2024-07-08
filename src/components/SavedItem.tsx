@@ -1,21 +1,39 @@
-import { useState } from "react";
-import { SavedItemProps } from "../Types/Types";
+import { useContext, useState } from "react";
+import { SavedItemProps, StateContext, Time } from "../Types/Types";
 
 import { LuTrash } from "react-icons/lu";
 import { VscLoading } from "react-icons/vsc";
+import { appContext } from "../context/AppContext";
 
 const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
   //gets order from lc
   const storedInfo = localStorage.getItem("order");
 
+  // state to determine if it's waiting for the LC to update which doesn't really work as intended
   const [coolDown, setCoolDown] = useState(false);
+
+  const { isRunning, handleSetState, isAlarmActive, handleSetAlarm } =
+    useContext(appContext) as StateContext;
+
+  const handleSetSavedTime = (time: Time) => {
+    if (isRunning) {
+      handleSetState(false);
+    }
+
+    if (isAlarmActive) {
+      handleSetAlarm(false);
+    }
+
+    setTime({
+      hours: time.hours,
+      minutes: time.minutes,
+      seconds: time.seconds,
+    });
+  };
 
   const handleDeleteTime = (keyName: string) => {
     // interval to give time for the re-render
     setCoolDown(true);
-    setInterval(() => {
-      setCoolDown(false);
-    }, 1500);
 
     // removes key from lc
     localStorage.removeItem(keyName);
@@ -39,6 +57,9 @@ const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
         setDateNow(new Date().toString());
       }
     }
+    setInterval(() => {
+      setCoolDown(false);
+    }, 1250);
   };
 
   return (
@@ -50,33 +71,25 @@ const SavedItem = ({ storedTimes, setDateNow, setTime }: SavedItemProps) => {
         >
           <div
             className="hover:cursor-pointer flex w-full "
-            onClick={() =>
-              setTime({
-                hours: time.hours,
-                minutes: time.minutes,
-                seconds: time.seconds,
-              })
-            }
+            onClick={() => handleSetSavedTime(time)}
           >
             <p className="w-full">{time.name}</p>
             <p className="mx-5 lg:mx-10">
               {time.hours}:{time.minutes}:{time.seconds}
             </p>
           </div>
-          <button
-            disabled={coolDown}
-            onClick={() => (coolDown ? null : handleDeleteTime(time.name))}
-            className={`text-red-800 ${
-              coolDown ? "text-blue-400" : "hover:text-red-400"
-            }
-            `}
-          >
-            {coolDown ? (
-              <VscLoading size={24} className="animate-spin" />
-            ) : (
+          {coolDown ? (
+            <VscLoading size={24} className="animate-spin text-blue-400" />
+          ) : (
+            <button
+              disabled={coolDown}
+              onClick={() => (coolDown ? null : handleDeleteTime(time.name))}
+              className="text-red-800 hover:text-red-400
+              "
+            >
               <LuTrash size={24} />
-            )}
-          </button>
+            </button>
+          )}
         </div>
       ))}
     </div>

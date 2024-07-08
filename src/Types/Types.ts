@@ -28,3 +28,10 @@ export interface StateSetterDateNow extends SetDateNow {
   dateNow: string;
   setTime: (value: Time) => void;
 }
+
+export interface StateContext {
+  isRunning: boolean;
+  isAlarmActive: boolean;
+  handleSetAlarm: (value: boolean) => void;
+  handleSetState: (value: boolean) => void;
+}

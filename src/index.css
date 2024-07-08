@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --animation-duration: 5s;
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -65,3 +69,43 @@ h6 {
 #__next {
   isolation: isolate;
 }
+/* 
+@keyframes circleTimer {
+  0% {
+    stroke-dashoffset: 1000;
+    stroke-dasharray: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    stroke-dasharray: 1000;
+  }
+}
+
+.circleSVG {
+  background-color: transparent;
+  position: absolute;
+  background-color: transparent;
+  top: 317px;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateZ(-90deg);
+}
+.circleSVG,
+.circle {
+  stroke: #9a6da8;
+  stroke-width: 4;
+  fill: transparent;
+  stroke-dashoffset: 1000;
+  stroke-dasharray: 0;
+  animation: var(--animation-duration) circleTimer linear;
+}
+
+.timer {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #9a6da8;
+  font-size: 42px;
+  font-weight: 700;
+} */

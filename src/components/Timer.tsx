@@ -1,17 +1,20 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { timeConvert } from "../utils/TimeFormatter";
-import { TimeState } from "../Types/Types";
 import { handleFormatValidation } from "../utils/InputFormatValidation";
+import { StateContext, TimeState } from "../Types/Types";
+// import StateProvider from "../context/StateProvider";
+import { appContext } from "../context/AppContext";
 
 const Timer = ({ time, setTime }: TimeState) => {
-  //keeps track if the time is running
-  const [isRunning, setIsRunning] = useState(false);
+  const { isRunning, handleSetState } = useContext(appContext) as StateContext;
 
   //alarm sound in a state so it stays during rerenders
   const [alarmAudio] = useState(new Audio("bedside-clock-alarm-95792.mp3"));
 
   //keeps track if the alarm is active
-  const [isAlarmActive, setIsAlarmActive] = useState(false);
+  const { isAlarmActive, handleSetAlarm } = useContext(
+    appContext
+  ) as StateContext;
 
   //handles the input
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +38,16 @@ const Timer = ({ time, setTime }: TimeState) => {
 
           //plays audio
           alarmAudio.play();
-          setIsAlarmActive(true);
+          handleSetAlarm(true);
+          document.title = "Timer";
+
+          //after x seconds, pause the alarm
+          setTimeout(() => {
+            alarmAudio.pause();
+            alarmAudio.currentTime = 0;
+            handleSetState(false);
+            handleSetAlarm(false);
+          }, 15000);
         } else {
           if (secondsInt > 0) {
             secondsInt -= 1;
@@ -64,7 +76,21 @@ const Timer = ({ time, setTime }: TimeState) => {
 
       return () => clearInterval(countdown);
     }
-  }, [isRunning, time, alarmAudio, setTime]);
+
+    // when clicking on a saved time, if the alarm is playing this will stop it from keep playing
+    if (!isAlarmActive) {
+      alarmAudio.pause();
+      alarmAudio.currentTime = 0;
+    }
+  }, [
+    isRunning,
+    time,
+    alarmAudio,
+    setTime,
+    handleSetState,
+    handleSetAlarm,
+    isAlarmActive,
+  ]);
 
   //start/stop button and converts to time format
   const handleStartStop = () => {
@@ -74,20 +100,20 @@ const Timer = ({ time, setTime }: TimeState) => {
 
     timeConvert({ time, setTime });
 
-    setIsRunning((prev) => !prev);
+    handleSetState(!isRunning);
 
-    setIsAlarmActive(false);
+    handleSetAlarm(false);
 
     document.title = "Timer";
   };
 
   const handleClickRunning = () => {
-    setIsRunning(false);
+    handleSetState(false);
   };
 
   return (
     <div
-      className={` text-white rounded-lg  border max-w-[600px] w-full 
+      className={` text-white rounded-lg  border max-w-[600px] w-full h-[300px] flex justify-center items-center
     ${
       isAlarmActive
         ? "border-red-400 bg-red-500/60"
